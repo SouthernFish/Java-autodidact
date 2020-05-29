@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.blacktea.commoditymanage.proxy.commodityManageProxy">
+
+    <!--商品列表-->
+    <select id="getCommodityList" resultType="map">
+        SELECT
+            goods_id commodityId,
+            goods_name commodityName,
+            goods_price commodityPrice,
+            goods_weight commodityWeight,
+            add_time createTime
+        FROM
+            sp_goods
+        WHERE
+            is_del = '0'
+            <if test="searchText != null and searchText != ''">
+                AND goods_name LIKE CONCAT('%', #{searchText},'%')
+            </if>
+    </select>
+
+    <!--删除商品-->
+    <update id="deleteCommodity">
+        UPDATE
+            sp_goods
+        SET
+            is_del = '1'
+        WHERE
+            goods_id = #{commodityId}
+    </update>
+
+    <!--分类列表-->
+    <select id="getCategoryList" resultType="map">
+        SELECT
+            cat_id categoryId,
+            cat_name categoryName,
+            cat_level categoryLevel,
+            cat_deleted isDeleted
+        FROM
+            sp_category
+        WHERE
+            cat_deleted = 0
+    </select>
+
+    <!--删除分类-->
+    <update id="deleteCategory">
+        UPDATE
+            sp_category
+        SET
+            cat_deleted = 1
+        WHERE
+            cat_id = #{categoryId}
+    </update>
+
+
+
+</mapper>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.blacktea.authoritymanage.proxy.authorityManageProxy">
+
+    <!--角色列表-->
+    <select id="getRoleTypeList" resultType="map">
+        SELECT
+            role_id roleId,
+            role_name roleName,
+            role_desc roleDescript
+        FROM
+            sp_role
+
+    </select>
+
+    <!--查询权限信息-->
+    <select id="getAuthorityInfo" resultType="map">
+        SELECT
+            FIND_IN_SET(perm.authorityId, ps_ids) isAuthority,
+            ps_ids authorityIds,
+            perm.*
+        FROM
+            sp_role role,
+            (
+                SELECT
+                    ps_id  authorityId,
+                    ps_c authorityController,
+                    ps_a authorityMethod,
+                    ps_level authorityLevel
+                FROM
+                    sp_permission
+                WHERE
+                    ps_name = #{authorityName}
+            )perm
+        WHERE
+            role.role_id = #{roleId}
+    </select>
+
+    <!--分配权限-->
+    <update id="distributeAuthority">
+        UPDATE
+            sp_role
+        SET
+            ps_ids = #{authorityIds},
+            ps_ca = #{controllerMethod}
+        WHERE
+            role_id = #{roleId}
+    </update>
+
+    <!--权限列表-->
+    <select id="getAuthorityList" resultType="map">
+         SELECT
+            perm.ps_id  authorityId,
+            perm.ps_name authorityName,
+            perm.ps_level authorityLevel,
+            api.ps_api_path authorityApiPath
+        FROM
+            sp_permission perm,
+            sp_permission_api api
+        WHERE
+            api.ps_id = perm.ps_id
+    </select>
+
+</mapper>

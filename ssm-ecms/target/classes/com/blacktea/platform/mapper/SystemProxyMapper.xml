@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.blacktea.platform.proxy.SystemProxy">
+
+    <resultMap id="systemOperatorResultMap" type="com.blacktea.entity.SystemOperatorEntity" >
+		<id column="mg_id" property="operatorId" jdbcType="INTEGER" />
+		<result column="mg_pwd" property="operatorPwd" jdbcType="VARCHAR" />
+		<result column="mg_name" property="operatorName" jdbcType="CHAR" />
+		<result column="mg_time" property="registerTime" jdbcType="INTEGER" />
+		<result column="role_id" property="roleId" jdbcType="INTEGER" />
+		<result column="mg_mobile" property="operatorTel" jdbcType="VARCHAR" />
+		<result column="mg_email" property="operatorEmail" jdbcType="VARCHAR" />
+		<result column="mg_state" property="operatorStatus" jdbcType="INTEGER" />
+	</resultMap>
+
+
+    <!--查询用户信息-->
+    <select id="getOperatorInfoByAccount" resultMap="systemOperatorResultMap">
+        SELECT
+            mg_id,
+            mg_name,
+            mg_pwd,
+            mg_time,
+            role_id,
+            mg_mobile,
+            mg_email,
+            mg_state
+        FROM
+            sp_manager
+        WHERE
+             mg_name = #{operatorAccount}
+    </select>
+
+    <!--查询用户角色-->
+    <select id="getOperatorRoleType" resultType="string">
+        SELECT
+            role_name
+        FROM
+            sp_role
+        WHERE
+            role_id = #{roleId}
+    </select>
+
+    <!-- 修改密码 -->
+    <update id="updateUserPassword">
+        UPDATE
+            sp_manager
+        SET
+            mg_pwd = #{operatorPwd}
+        WHERE
+          mg_id = #{operatorId}
+          AND mg_state = 1
+    </update>
+
+
+
+
+</mapper>

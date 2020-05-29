@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.blacktea.datastatistics.proxy.dataStatisticsProxy">
+
+    <!--去年年初到现在的月份-->
+    <sql id="monthUtilSql">
+		(
+			SELECT
+				@rownum :=@rownum + 1 AS NO,
+				DATE_FORMAT(DATE_SUB(
+					now(),
+					INTERVAL @rownum MONTH
+				),'%Y-%m') AS all_day,
+				DATE_FORMAT(DATE_SUB(
+					now(),
+					INTERVAL @rownum MONTH
+				),'%c') AS all_month
+			FROM
+				(SELECT @rownum :=- 1) r
+				<!--,system_city LIMIT #{month} -->
+		) ddate
+	</sql>
+
+    <!--查询地区-->
+    <select id="getAreaStatistics" resultType="map">
+        SELECT
+            DISTINCT rp1_area address
+        FROM
+            sp_report_1
+        WHERE
+            1 = 1
+            <if test="starTime != null and startTime != ''">
+                AND rp1_date &gt;= #{starTime}
+            </if>
+            <if test="endTime != null and endTime != ''">
+                AND rp1_date &lt;= #{endTime}
+            </if>
+    </select>
+
+    <!--数据统计-->
+    <select id="getDataStatistics" resultType="map">
+        SELECT
+            id statisticsId,
+            rp1_user_count userCount,
+            rp1_date statisticsTime
+        FROM
+            sp_report_1
+        WHERE
+            1 = 1
+            AND rp1_area = #{address}
+            <if test="starTime != null and startTime != ''">
+                AND rp1_date &gt;= #{starTime}
+            </if>
+            <if test="endTime != null and endTime != ''">
+                AND rp1_date &lt;= #{endTime}
+            </if>
+        
+    </select>
+</mapper>
