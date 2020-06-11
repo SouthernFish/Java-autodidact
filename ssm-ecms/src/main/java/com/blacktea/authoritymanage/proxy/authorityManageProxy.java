@@ -28,6 +28,16 @@ public interface authorityManageProxy {
 
 	/**
 	 * @Author TR
+	 * @Create 2020/6/9 14:45
+	 * @Title: getRoleAuthorityList
+	 * @Description: 角色权限列表
+	 */
+	List<Map<String,Object>> getRoleAuthorityList(@Param("roleId") String roleId,
+												  @Param("level") String level,
+												  @Param("parentId") String parentId);
+
+	/**
+	 * @Author TR
 	 * @Create 2020/5/28 14:02
 	 * @Title: getAuthorityInfo
 	 * @Params: [authorityName]
@@ -54,4 +64,31 @@ public interface authorityManageProxy {
 	 * @Description: 权限列表
 	 */
 	List<Map<String,Object>> getAuthorityList(@Param("page") PageForSystem page);
+
+	/**
+	 * @Author TR
+	 * @Create 2020/6/9 15:18
+	 * @Title: addRoles
+	 * @Description: 添加角色
+	 */
+	Integer addRoles(@Param("roleName") String roleName,
+					 @Param("roleDescription") String roleDescription);
+
+	/**
+	 * @Author TR
+	 * @Create 2020/6/9 15:23
+	 * @Title: deleteRoles
+	 * @Description: 删除角色
+	 */
+	Integer deleteRoles(@Param("roleId") Integer roleId);
+
+	/**
+	 * @Author TR
+	 * @Create 2020/6/9 15:25
+	 * @Title: modifyRoles
+	 * @Description: 编辑角色信息
+	 */
+	Integer modifyRoles(@Param("roleId") Integer roleId,
+						@Param("roleDescription") String roleDescription,
+						@Param("roleName") String roleName);
 }

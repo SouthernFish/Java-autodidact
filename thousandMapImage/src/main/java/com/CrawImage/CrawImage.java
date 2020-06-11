@@ -42,11 +42,14 @@ public class CrawImage {
     static int imageNumber ;
     // 存储位置
     static String basePath;
+    // 打印
+    static String log;
 
-    public CrawImage(int imageNumber,int currentIndex,String basePath) {
+    public CrawImage(int imageNumber,int currentIndex,String basePath,String log) {
         this.imageNumber = imageNumber;
         this.currentIndex = currentIndex;
         this.basePath = basePath;
+        this.log = log;
     }
 
     // 网址中文乱码处理
@@ -76,9 +79,23 @@ public class CrawImage {
     }
 
     //  爬虫
-    public void crawImageImplement(String targetUrl) throws Exception{
+    public String crawImageImplement(String targetUrl) throws Exception{
         targetUrl =  matchUrl(targetUrl);  // 处理URL中的中文字符
-        System.setProperty("webdriver.chrome.driver", "D://ChromeDriver//chromedriver.exe");
+//        System.setProperty("webdriver.chrome.driver", "D://ChromeDriver//chromedriver.exe");/driver/chromedriver.exe
+        String chrome = "11";//CrawImage.class.getClassLoader().getResource("").getPath() +"driver/chromedriver.exe"; // 本地驱动路径
+        System.out.println(chrome);
+        this.log = chrome +"\n";
+        chrome = "driver/chromedriver.exe";//  驱动 jar  路径
+//        chrome = this.getClass().getProtectionDomain().getCodeSource().getLocation().getFile()+"/driver/chromedriver.exe";
+        System.out.println(chrome);
+        this.log = this.log + chrome+"\n";
+//        chrome = this.getClass().getResource("/driver/chromedriver.exe").getPath();
+        chrome = java.net.URLDecoder.decode(chrome, "UTF-8");
+//        chrome = System.getProperty("java.class.path")+"/driver/chromedriver.exe";  //利用了java运行时的系统属性来得到jar文件位置，也是/xxx/xxx.jar这种形式。
+       
+        System.out.println(chrome);
+        this.log = this.log + chrome+"\n";
+        System.setProperty("webdriver.chrome.driver", chrome);
         // 无界面浏览
         ChromeOptions options = new ChromeOptions(); // 设置chrome选项
         options.addArguments("--headless");
@@ -93,15 +110,18 @@ public class CrawImage {
             int page = 1; // 访问层数
             while(currentIndex <= imageNumber){
                 System.out.println("第"+page+"页"+targetUrl);
+                this.log = this.log + "\n"+"第"+page+"页"+targetUrl;
                 List<WebElement> pages = getImageUrl(driver,targetUrl,pool);
                 targetUrl = pages.get(pages.size()-2).getAttribute("href");
                 System.out.println("当前最大下标："+(currentIndex-1));
+                this.log = this.log + "\n"+"当前最大下标："+(currentIndex-1);
                 page++;
             }
             pool.shutdown();
-
+            return this.log;
         }catch(Exception e){
             System.out.print(e);
+            return this.log + e.getMessage();
         }
     }
 

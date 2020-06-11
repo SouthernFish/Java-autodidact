@@ -63,4 +63,59 @@ public class authorityManageController extends BaseController {
 		return authorityManageService.getAuthorityList(getOperatorByToken(token), getJSONObjectParams(params));
 	}
 
+
+	/**
+	 * @Author TR
+	 * @Create 2020/6/9 13:57
+	 * @Title: addRoles
+	 * @Description: 添加角色
+	 */
+	@CheckToken
+	@RequestMapping(value = "/addrole",method = RequestMethod.POST)
+	public BaseResult addRole(@CheckParam() String token, String params){
+		return authorityManageService.addRole(getOperatorByToken(token), getJSONObjectParams(params));
+	}
+
+
+	/**
+	 * @Author TR
+	 * @Create 2020/6/9 13:57
+	 * @Title: deleteRoles
+	 * @Description: 删除角色
+	 */
+	@CheckToken
+	@RequestMapping(value = "/deleterole",method = RequestMethod.POST)
+	public BaseResult deleteRole(@CheckParam() String token, String params){
+		return authorityManageService.deleteRole(getOperatorByToken(token), getJSONObjectParams(params));
+	}
+
+	/**
+	 * @Author TR
+	 * @Create 2020/6/9 13:57
+	 * @Title: modifyRoles
+	 * @Description: 编辑角色
+	 */
+	@CheckToken
+	@RequestMapping(value = "/modifyrole",method = RequestMethod.POST)
+	public BaseResult modifyRole(@CheckParam() String token, String params){
+		return authorityManageService.modifyRole(getOperatorByToken(token), getJSONObjectParams(params));
+	}
+
+	/**
+	 * @Author TR
+	 * @Create 2020/6/9 14:15
+	 * @Title: getRoleDetail
+	 * @Description: 获取角色详细信息
+	 */
+	@CheckToken
+	@RequestMapping(value = "/getroledetail",method = RequestMethod.POST)
+	public BaseResult getRoleDetail(@CheckParam() String token, String params){
+		return authorityManageService.getRoleDetail(getOperatorByToken(token), getJSONObjectParams(params));
+	}
+
+	@CheckToken
+	@RequestMapping(value = "/deleteroleauthority",method = RequestMethod.POST)
+	public BaseResult deleteRoleAuthority(@CheckParam() String token, String params){
+		return authorityManageService.deleteRoleAuthority(getOperatorByToken(token), getJSONObjectParams(params));
+	}
 }

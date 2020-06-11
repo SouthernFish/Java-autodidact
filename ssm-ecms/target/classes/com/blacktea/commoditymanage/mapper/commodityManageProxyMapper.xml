@@ -9,7 +9,7 @@
             goods_name commodityName,
             goods_price commodityPrice,
             goods_weight commodityWeight,
-            add_time createTime
+            FROM_UNIXTIME(add_time,'%Y-%m-%d %H:%i:%s') createTime
         FROM
             sp_goods
         WHERE
@@ -24,7 +24,8 @@
         UPDATE
             sp_goods
         SET
-            is_del = '1'
+            is_del = '1' ,
+            delete_time = TIMESTAMPDIFF(SECOND, '1970-1-1 8:0:0', NOW())
         WHERE
             goods_id = #{commodityId}
     </update>
@@ -52,6 +53,80 @@
             cat_id = #{categoryId}
     </update>
 
+    <!--添加商品-->
+    <insert id="addCommodity">
+        INSERT INTO sp_goods(
+            goods_name,
+            goods_price,
+            goods_number,
+            goods_weight,
+            add_time,
+            upd_time,
+            cat_id,
+            goods_introduce,
+            goods_big_logo,
+            goods_small_logo
+        )
+        VALUES(
+            #{commodityName},
+            #{commodityPrice},
+            #{commodityNumber},
+            #{commodityWeight},
+            TIMESTAMPDIFF(SECOND, '1970-1-1 8:0:0', NOW()),
+            TIMESTAMPDIFF(SECOND, '1970-1-1 8:0:0', NOW()),
+            #{categoryId},
+            #{commodityIntroduce},
+            #{commodityBigLogo},
+            #{commoditySmallLogo}
+        )
+    </insert>
 
+    <!--查询商品已经存在-->
+    <select id="judgeCommodityExist" resultType="integer">
+        SELECT
+            goods_id
+        FROM
+            sp_goods
+        WHERE
+            goods_name = #{commodityName}
+            AND goods_price = #{commodityPrice}
+            AND goods_weight = #{commodityWeight}
+            AND goods_number = #{commodityNumber}
+            AND goods_introduce = #{commodityIntroduce}
+            AND cat_id = #{categoryId}
+            AND goods_big_logo = #{commodityBigLogo}
+            AND goods_small_logo = #{commoditySmallLogo}
+        LIMIT 1
+    </select>
+
+    <!--修改商品状态-->
+    <update id="updateCommodityDel">
+        UPDATE
+            sp_goods
+        SET
+            is_del = '0',
+            delete_time = TIMESTAMPDIFF(SECOND, '1970-1-1 8:0:0', NOW())
+        WHERE
+            goods_id = #{commodityId}
+    </update>
+
+    <!-- 编辑商品信息 -->
+    <update id="modifyCommodity">
+        UPDATE
+            sp_goods
+        SET
+            goods_name = #{commodityName},
+            goods_price = #{commodityPrice},
+            goods_weight = #{commodityWeight},
+            goods_number =  #{commodityNumber},
+            goods_introduce = #{commodityIntroduce},
+            cat_id = #{categoryId},
+            goods_big_logo = #{commodityBigLogo},
+            goods_small_logo = #{commoditySmallLogo},
+            upd_time = TIMESTAMPDIFF(SECOND, '1970-1-1 8:0:0', NOW())
+        WHERE
+            goods_id = #{commodityId}
+            AND is_del = '0'
+    </update>
 
 </mapper>

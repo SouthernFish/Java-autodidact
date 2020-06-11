@@ -66,6 +66,19 @@ public class commodityManageController extends BaseController {
 
 	/**
 	 * @Author TR
+	 * @Create 2020/5/28 16:13
+	 * @Title: addCommodity
+	 * @Params: [token, params]
+	 * @Description: 添加商品
+	 */
+	@CheckToken
+	@RequestMapping(value = "/modifycommodity", method = RequestMethod.POST)
+	public BaseResult modifyCommodity(@CheckParam() String token, String params){
+		return commodityManageService.modifyCommodity(getOperatorByToken(token),getJSONObjectParams(params));
+	}
+
+	/**
+	 * @Author TR
 	 * @Create 2020/5/28 16:40
 	 * @Title: getCategoryList
 	 * @Params: [token, params]

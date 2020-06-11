@@ -10,7 +10,30 @@
             role_desc roleDescript
         FROM
             sp_role
+    </select>
 
+    <!--获取角色权限列表-->
+    <select id="getRoleAuthorityList" resultType="map">
+        SELECT
+            perm.ps_id authorityId,
+            perm.ps_name authorityName,
+            api.ps_api_path authorityApiPath
+        FROM
+            sp_permission perm
+            JOIN sp_permission_api api ON api.ps_id = perm.ps_id
+        WHERE
+            FIND_IN_SET(perm.ps_id,(
+                SELECT
+                    ps_ids
+                FROM
+                    sp_role
+                WHERE
+                    role_id = #{roleId}
+            ))
+            AND ps_level = #{level}
+            <if test="parentId != null and parentId != ''">
+                AND perm.ps_pid = #{parentId}
+            </if>
     </select>
 
     <!--查询权限信息-->
@@ -53,7 +76,8 @@
             perm.ps_id  authorityId,
             perm.ps_name authorityName,
             perm.ps_level authorityLevel,
-            api.ps_api_path authorityApiPath
+            api.ps_api_path authorityApiPath,
+            perm.ps_pid authorityParentId
         FROM
             sp_permission perm,
             sp_permission_api api

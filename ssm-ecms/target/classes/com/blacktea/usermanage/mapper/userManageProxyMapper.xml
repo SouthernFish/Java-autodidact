@@ -7,7 +7,7 @@
         SELECT
             mg_id operatorId,
             mg_name operatorName,
-            mg_time registerTime,
+            FROM_UNIXTIME(mg_time,'%Y-%m-%d %H:%i:%s') registerTime,
             role_id roleId,
             mg_mobile operatorTel,
             mg_email operatorEmail,
@@ -30,6 +30,55 @@
             mg_state = #{userStatus}
         WHERE       
             mg_id = #{operatorId}
-    </update>  
+    </update>
 
+    <!-- 添加用户 -->
+    <insert id="addUser">
+        INSERT INTO sp_manager(
+            mg_name,
+            mg_pwd,
+            mg_time,
+            mg_mobile,
+            mg_email,
+            mg_state
+        )
+        VALUES (
+            #{userName},
+            #{userPwd},
+            TIMESTAMPDIFF(SECOND, '1970-1-1 8:0:0', NOW()),
+            #{userTel},
+            #{userEmail},
+            0
+        );
+    </insert>
+
+    <!-- 删除用户 -->
+    <delete id="deleteUser">
+        DELETE FROM
+            sp_manager
+        WHERE
+            mg_id = #{userId}
+    </delete>
+
+    <!--编辑用户信息-->
+    <update id="modifyUser">
+        UPDATE
+            sp_manager
+        SET
+            mg_mobile = #{userTel},
+            mg_email = #{userEmail}
+        WHERE       
+            mg_id = #{userId}
+    </update>
+
+    <!--判断用户是否已经存在-->
+    <select id="judgeUserExist" resultType="integer">
+        SELECT
+            mg_id
+        FROM
+            sp_manager
+        WHERE
+            mg_name = #{operatorName}
+        LIMIT 1
+    </select>
 </mapper>

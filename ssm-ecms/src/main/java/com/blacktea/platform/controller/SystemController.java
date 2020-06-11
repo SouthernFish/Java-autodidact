@@ -43,9 +43,9 @@ public class SystemController extends BaseController {
 	 * @Description: 登录
 	 */
 	@CheckToken()
-	@RequestMapping(value = "/logout", method = RequestMethod.POST)
-	public BaseResult logout(@CheckParam() String token){
-		return  systemService.logout(token);
+	@RequestMapping(value = "/loginout", method = RequestMethod.POST)
+	public BaseResult loginOut(@CheckParam() String token){
+		return  systemService.loginOut(token);
 	}
 
 	/**
@@ -56,7 +56,7 @@ public class SystemController extends BaseController {
 	 * @Description: 修改用户密码
 	 */
 	@CheckToken()
-	@RequestMapping(value = "/updateuserpassword", method = RequestMethod.POST)
+	@RequestMapping(value = "/updatepwd", method = RequestMethod.POST)
 	public BaseResult updateUserPassword(@CheckParam() String token, String params){
 		return systemService.updateUserPassword(token,getJSONObjectParams(params));
 	}

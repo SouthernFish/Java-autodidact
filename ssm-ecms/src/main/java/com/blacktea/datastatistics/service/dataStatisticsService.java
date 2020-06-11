@@ -27,13 +27,12 @@ public class dataStatisticsService extends BaseService {
 	private dataStatisticsProxy dataStatisticsProxy;
 
 	public BaseResult getDataStatistics(SystemOperatorEntity operator, JSONObject params) {
-		PageForSystem page = null;
+		
 		String starTime;
 		String endTime;
 
 		// 参数
 		try {
-			page = getPageEntity(params);
 			starTime = params.get("starTime") == null ? null : params.getString("starTime");
 			endTime = params.get("endTime") == null ? null : params.getString("endTime");
 		}catch (Exception e){

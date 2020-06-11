@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane fx:id="Parent" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="610.0" prefWidth="910.0" style="-fx-background-color: #d4faf8;" stylesheets="@../css/myCss2.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.AppUI.Controller">
+
+    <children>
+        <AnchorPane fx:id="ImageProcess" layoutX="5.0" layoutY="5.0" prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: #f4eece;" visible="false">
+            <children>
+                <Pane fx:id="TargetImageWrap" prefHeight="600.0" prefWidth="450.0">
+                    <children>
+                        <Pane layoutX="5.0" layoutY="450.0" prefHeight="145.0" prefWidth="440.0" style="-fx-background-color: #fad4d4;">
+                            <children>
+                                <Button fx:id="ChooseTargetImage" layoutX="20.0" layoutY="47.5" mnemonicParsing="false" onMouseClicked="#chooseTargetImage" prefHeight="50.0" prefWidth="50.0" />
+                                <TextField fx:id="TargetImageWidth" layoutX="90.0" layoutY="23.0" prefHeight="40.0" prefWidth="70.0" promptText="576" />
+                                <TextField fx:id="TargetImageHeight" layoutX="90.0" layoutY="85.0" prefHeight="40.0" prefWidth="70.0" promptText="1024" />
+                                <Button fx:id="ClipImage" layoutX="320.0" layoutY="47.5" mnemonicParsing="false" onMouseClicked="#ClipImage" prefHeight="50.0" prefWidth="50.0" />
+                        <Slider fx:id="TargetWidthControl" layoutX="170.0" layoutY="35.0" onMouseClicked="#setTargetImageWidth" onMouseDragged="#setTargetImageWidth" />
+                        <Slider fx:id="TargetHeightControl" layoutX="170.0" layoutY="97.0" onMouseClicked="#setTargetImageHeight" onMouseDragged="#setTargetImageHeight" />
+                            </children>
+                        </Pane>
+                        <BorderPane fx:id="TargetImageBorderPane" layoutX="5.0" layoutY="5.0" prefHeight="440.0" prefWidth="440.0">
+                            <center>
+                                <ImageView fx:id="TargetImage" fitHeight="440.0" fitWidth="440.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER" />
+                            </center>
+                        </BorderPane>
+                    </children>
+                </Pane>
+                <Pane fx:id="ResultImageWrap" layoutX="450.0" prefHeight="600.0" prefWidth="450.0" style="-fx-background-color: #ffe2d9;">
+                    <children>
+                        <Pane layoutX="5.0" layoutY="450.0" prefHeight="145.0" prefWidth="440.0" style="-fx-background-color: #fad4d4;">
+                            <children>
+                                <TextField fx:id="ResourcePath" layoutY="23.0" prefHeight="40.0" prefWidth="360.0" promptText="F:/thousandMapImaging/resourcesPictures/resources/">
+                                    <font>
+                                        <Font name="Microsoft YaHei" size="13.0" />
+                                    </font>
+                                </TextField>
+                                <Button fx:id="ChooseResource" layoutX="380.0" layoutY="23.0" mnemonicParsing="false" onMouseClicked="#chooseLocalFileMerge" prefHeight="40.0" prefWidth="40.0" />
+                                <TextField fx:id="MergeImageWidth" layoutY="85.0" prefHeight="40.0" prefWidth="50.0" promptText="9" />
+                                <TextField fx:id="MergeImageHeight" layoutX="160.0" layoutY="85.0" prefHeight="40.0" prefWidth="50.0" promptText="16" />
+                                <Button fx:id="MergeImage" layoutX="320.0" layoutY="85.0" mnemonicParsing="false" onMouseClicked="#mergeImage" prefHeight="40.0" prefWidth="40.0" />
+                                <Button fx:id="SaveResultImage" layoutX="380.0" layoutY="85.0" mnemonicParsing="false" onMouseClicked="#saveResultImage" prefHeight="40.0" prefWidth="40.0" />
+                        <Slider fx:id="MergeWidthControl" layoutX="57.0" layoutY="98.0" onMouseClicked="#setMergeImageWidth" onMouseDragged="#setMergeImageWidth" prefHeight="14.0" prefWidth="100.0" />
+                        <Slider fx:id="MergeHeightControl" layoutX="217.0" layoutY="98.0" onMouseClicked="#setMergeImageHeight" onMouseDragged="#setMergeImageHeight" prefHeight="14.0" prefWidth="100.0" />
+                            </children></Pane>
+                        <BorderPane fx:id="ResultImageBorderPane" layoutX="5.0" layoutY="5.0" prefHeight="440.0" prefWidth="440.0">
+                            <center>
+                                <ImageView fx:id="ResultImage" fitHeight="440.0" fitWidth="440.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER" />
+                            </center>
+                        </BorderPane>
+                    </children>
+                </Pane>
+                <Pane layoutX="365.0" layoutY="450.0" prefHeight="145.0" prefWidth="100.0">
+                    <children>
+                        <Button fx:id="Setting" layoutX="25.0" layoutY="20.0" mnemonicParsing="false" onMouseClicked="#menuChoose" prefHeight="45.0" prefWidth="45.0" />
+                        <Button fx:id="ReturnToSearch" layoutX="25.0" layoutY="85.0" mnemonicParsing="false" onMouseClicked="#switchToSearchEngine" prefHeight="45.0" prefWidth="45.0" />
+                    </children>
+                </Pane>
+            </children>
+        </AnchorPane>
+        <AnchorPane fx:id="SearchEngine" layoutX="5.0" layoutY="5.0" prefHeight="600.0" prefWidth="900.0">
+            <children>
+                <Pane prefHeight="260.0" prefWidth="533.0">
+                    <children>
+                  <TextField fx:id="FocusMouse" prefHeight="5.0" prefWidth="5.0" promptText="mouse" visible="false" />
+                        <HBox layoutX="17.0" layoutY="206.0" prefHeight="40.0" prefWidth="500.0">
+                            <children>
+                                <TextField fx:id="InputSearch" layoutX="5.0" layoutY="5.0" prefHeight="40.0" prefWidth="360.0" promptText="动漫人物">
+                                    <HBox.margin>
+                                        <Insets right="15.0" />
+                                    </HBox.margin>
+                                    <font>
+                                        <Font name="Microsoft YaHei" size="14.0" />
+                                    </font>
+                                    <padding>
+                                        <Insets left="10.0" />
+                                    </padding>
+                                </TextField>
+                                <TextField fx:id="InputNumber" alignment="CENTER" prefHeight="40.0" prefWidth="65.0" promptText="5">
+                                    <HBox.margin>
+                                        <Insets right="15.0" />
+                                    </HBox.margin>
+                                    <font>
+                                        <Font name="Microsoft YaHei" size="14.0" />
+                                    </font>
+                                </TextField>
+                                <Button fx:id="SearchImageDownload" mnemonicParsing="false" onMouseClicked="#searchAndDownload" prefHeight="40.0" prefWidth="45.0">
+                                    <font>
+                                        <Font size="14.0" />
+                                    </font>
+                                </Button>
+                            </children>
+                        </HBox>
+                        <HBox layoutX="17.0" layoutY="157.0" prefHeight="40.0" prefWidth="500.0">
+                            <children>
+                                <TextField fx:id="InputFilePath" layoutX="5.0" layoutY="5.0" prefHeight="40.0" prefWidth="440.0" promptText="F:/thousandMapImaging/resourcesPictures/resources/">
+                                    <HBox.margin>
+                                        <Insets right="15.0" />
+                                    </HBox.margin>
+                                    <font>
+                                        <Font name="Microsoft YaHei" size="14.0" />
+                                    </font>
+                                </TextField>
+                                <Button fx:id="ChooseLocalFile" mnemonicParsing="false" onMouseClicked="#chooseLocalFileSearch" prefHeight="40.0" prefWidth="45.0">
+                                    <font>
+                                        <Font size="14.0" />
+                                    </font>
+                                </Button>
+                            </children>
+                        </HBox>
+                        <Pane fx:id="TopImage" layoutX="17.0" layoutY="15.0" prefHeight="130.0" prefWidth="500.0" />
+                    </children>
+                </Pane>
+                <Pane layoutX="518.0" prefHeight="600.0" prefWidth="382.0">
+               <children>
+                  <TextArea fx:id="LogText" layoutX="6.0" layoutY="6.0" prefHeight="590.0" prefWidth="370.0">
+                     <font>
+                        <Font name="Microsoft YaHei" size="14.0" />
+                     </font>
+                     <padding>
+                        <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
+                     </padding></TextArea>
+               </children>
+                </Pane>
+                <Pane layoutY="260.0" prefHeight="340.0" prefWidth="510.0">
+                    <children>
+                        <Pane fx:id="ImageLeftDown" layoutY="90.0" prefHeight="250.0" prefWidth="350.0">
+                            <children>
+                                <Circle layoutX="280.0" layoutY="67.0" radius="11.0" strokeType="INSIDE" />
+                                <Circle layoutX="261.0" layoutY="83.0" radius="8.0" strokeType="INSIDE" />
+                              <Circle layoutX="302.0" layoutY="42.0" radius="14.0" strokeType="INSIDE" />
+                            </children></Pane>
+                        <Ellipse layoutX="384.0" layoutY="64.0" radiusX="117.0" radiusY="59.0" strokeType="INSIDE" />
+                        <Text fx:id="SearchHint" layoutX="294.0" layoutY="51.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Life has no limitations.It always opens up for more possibilities for the better." wrappingWidth="180.0">
+                            <font>
+                                <Font name="Timer New Roman" size="14.0" />
+                            </font>
+                        </Text>
+                  <Button fx:id="MouseSwitch" layoutX="452.0" layoutY="286.0" mnemonicParsing="false" onMouseClicked="#switchToMergeImage" prefHeight="40.0" prefWidth="45.0">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="ClearLogText" layoutX="398.0" layoutY="286.0" mnemonicParsing="false" onMouseClicked="#clearLogText" prefHeight="40.0" prefWidth="45.0">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Button>
+                    </children>
+                </Pane>
+            </children>
+        </AnchorPane>
+    </children>
+
+</AnchorPane>

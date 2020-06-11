@@ -91,10 +91,24 @@ public class commodityManageService extends BaseService {
 	 * @Description: 添加商品
 	 */
 	public BaseResult addCommodity(SystemOperatorEntity operator, JSONObject params) {
-
+		String commodityWeight;
+		String commodityPrice;
+		String commodityName;
+		Integer commodityNumber;
+		Integer categoryId; // 类型id
+		String commodityIntroduce; // 商品详情介绍
+		String commodityBigLogo;  // 图片logo大图
+		String commoditySmallLogo; // 图片logo小图
 		// 参数
 		try {
-
+			commodityWeight = params.getString("commodityWeight");
+			commodityPrice = params.getString("commodityPrice");
+			commodityName = params.getString("commodityName");
+			commodityNumber = Integer.parseInt(params.getString("commodityNumber"));
+			categoryId = Integer.parseInt(params.getString("categoryId"));
+			commodityBigLogo = params.getString("commodityBigLogo");
+			commoditySmallLogo = params.getString("commoditySmallLogo");
+			commodityIntroduce = params.getString("commodityIntroduce");
 		}catch (Exception e){
 			e.printStackTrace();
 			return errorParamsResult();
@@ -102,15 +116,19 @@ public class commodityManageService extends BaseService {
 
 		// 数据处理
 		try {
-			Integer total = 0; //userManageProxy.deleteUser(userStatus,operatorId);
-
+			// 查询商品已经是否存在
+			Integer commodityId = commodityManageProxy.judgeCommodityExist(commodityWeight, commodityPrice, commodityName, commodityNumber, categoryId, commodityIntroduce, commodityBigLogo, commoditySmallLogo);
+			Integer total = 0;
+			if(commodityId !=null ){
+				total = commodityManageProxy.updateCommodityDel(commodityId);
+			}else{
+				total = commodityManageProxy.addCommodity(commodityWeight, commodityPrice, commodityName, commodityNumber, categoryId, commodityIntroduce, commodityBigLogo, commoditySmallLogo);
+			}
 			if (total.intValue() > 0) {
 				return successResult("商品添加成功");
 			} else {
 				return errorResult("操作失败，请稍后重试");
 			}
-
-
 		}catch (Exception e){
 			e.printStackTrace();
 			return errorExceptionResult();
@@ -122,21 +140,38 @@ public class commodityManageService extends BaseService {
 	 * @Create 2020/5/28 16:37
 	 * @Title: modifyCommodity
 	 * @Params: [operator, params]
-	 * @Description: 编辑分类
+	 * @Description: 编辑商品
 	 */
 	public BaseResult modifyCommodity(SystemOperatorEntity operator, JSONObject params) {
-
+		Integer commodityId;
+		String commodityWeight;
+		String commodityPrice;
+		String commodityName;
+		Integer commodityNumber;
+		Integer categoryId; // 类型id
+		String commodityIntroduce; // 商品详情介绍
+		String commodityBigLogo;  // 图片logo大图
+		String commoditySmallLogo; // 图片logo小图
 		// 参数
 		try {
-
+			commodityId =Integer.parseInt(params.getString("commodityId")) ;
+			commodityWeight = params.getString("commodityWeight");
+			commodityPrice = params.getString("commodityPrice");
+			commodityName = params.getString("commodityName");
+			commodityNumber = Integer.parseInt(params.getString("commodityNumber"));
+			categoryId = Integer.parseInt(params.getString("categoryId"));
+			commodityBigLogo = params.getString("commodityBigLogo");
+			commoditySmallLogo = params.getString("commoditySmallLogo");
+			commodityIntroduce = params.getString("commodityIntroduce");
 		}catch (Exception e){
 			e.printStackTrace();
 			return errorParamsResult();
 		}
-
+		
 		// 数据处理
 		try {
-			Integer total = 0; //userManageProxy.deleteUser(userStatus,operatorId);
+			Integer total = commodityManageProxy.modifyCommodity(commodityId, commodityWeight, commodityPrice, commodityName, commodityNumber, categoryId, commodityIntroduce, commodityBigLogo,
+					commoditySmallLogo);
 
 			if (total.intValue() > 0) {
 				return successResult("商品修改成功");
@@ -164,7 +199,6 @@ public class commodityManageService extends BaseService {
 		// 参数
 		try {
 			page = getPageEntity(params);
-
 		}catch (Exception e){
 			e.printStackTrace();
 			return errorParamsResult();
@@ -173,7 +207,7 @@ public class commodityManageService extends BaseService {
 		// 数据处理
 		try {
 			List<Map<String,Object>> commodityList = commodityManageProxy.getCategoryList(page);
-			return successResult("获取角色列表成功", commodityList);
+			return successResult("获取分类列表成功", commodityList);
 		}catch (Exception e){
 			e.printStackTrace();
 			return errorExceptionResult();
@@ -201,7 +235,7 @@ public class commodityManageService extends BaseService {
 
 		// 数据处理
 		try {
-			Integer total = commodityManageProxy.deleteCategory(categoryId);
+			Integer total = 1; // commodityManageProxy.deleteCategory(categoryId);
 			if (total.intValue() > 0) {
 				return successResult("分类删除成功");
 			} else {
@@ -232,7 +266,7 @@ public class commodityManageService extends BaseService {
 
 		// 数据处理
 		try {
-			Integer total = 0; //userManageProxy.deleteUser(userStatus,operatorId);
+			Integer total = 1; //userManageProxy.deleteUser(userStatus,operatorId);
 
 			if (total.intValue() > 0) {
 				return successResult("分类添加成功");

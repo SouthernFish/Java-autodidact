@@ -52,4 +52,59 @@ public interface commodityManageProxy {
 	 * @Description: 删除分类
 	 */
 	Integer deleteCategory(@Param("categoryId") Integer categoryId);
+
+	/**
+	 * @Author TR
+	 * @Create 2020/6/9 10:49
+	 * @Title: addCommodity
+	 * @Description: 添加商品
+	 */
+	Integer addCommodity(@Param("commodityWeight") String commodityWeight,
+						 @Param("commodityPrice") String commodityPrice,
+						 @Param("commodityName") String commodityName,
+						 @Param("commodityNumber") Integer commodityNumber,
+						 @Param("categoryId") Integer categoryId,
+						 @Param("commodityIntroduce") String commodityIntroduce,
+						 @Param("commodityBigLogo") String commodityBigLogo,
+						 @Param("commoditySmallLogo") String commoditySmallLogo);
+
+	/**
+	 * @Author TR
+	 * @Create 2020/6/9 11:42
+	 * @Title: judgeCommodityExist
+	 * @Description: 查询商品是否存在
+	 */
+	Integer judgeCommodityExist(@Param("commodityWeight") String commodityWeight,
+								@Param("commodityPrice") String commodityPrice,
+								@Param("commodityName") String commodityName,
+								@Param("commodityNumber") Integer commodityNumber,
+								@Param("categoryId") Integer categoryId,
+								@Param("commodityIntroduce") String commodityIntroduce,
+								@Param("commodityBigLogo") String commodityBigLogo,
+								@Param("commoditySmallLogo") String commoditySmallLogo);
+
+	/**
+	 * @Author TR
+	 * @Create 2020/6/9 11:47
+	 * @Title: updateCommodityDel
+	 * @Description: 修改商品状态
+	 */
+	Integer updateCommodityDel(@Param("commodityId") Integer commodityId);
+
+	/**
+	 * @Author TR
+	 * @Create 2020/6/9 10:55
+	 * @Title: modifyCommodity
+	 * @Description: 编辑商品信息
+	 */
+	Integer modifyCommodity(@Param("commodityId") Integer commodityId,
+							@Param("commodityWeight") String commodityWeight,
+							@Param("commodityPrice") String commodityPrice,
+							@Param("commodityName") String commodityName,
+							@Param("commodityNumber") Integer commodityNumber,
+							@Param("categoryId") Integer categoryId,
+							@Param("commodityIntroduce") String commodityIntroduce,
+							@Param("commodityBigLogo") String commodityBigLogo,
+							@Param("commoditySmallLogo") String commoditySmallLogo);
+
 }

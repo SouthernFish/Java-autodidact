@@ -61,7 +61,7 @@ public class userManageService extends BaseService {
 	 * @Create 2020/5/28 10:38
 	 * @Title: updateUserStatus
 	 * @Params: [operator, params]
-	 * @Description:
+	 * @Description: 修改用户状态
 	 */
 	public BaseResult updateUserStatus(SystemOperatorEntity operator, JSONObject params){
 		Integer userStatus;
@@ -97,7 +97,6 @@ public class userManageService extends BaseService {
 	 * @Author TR
 	 * @Create 2020/5/28 10:42
 	 * @Title: distributeUser
-	 * @Params: [params]
 	 * @Description: 分配用户
 	 */
 	public BaseResult distributeUser(JSONObject params){
@@ -115,8 +114,7 @@ public class userManageService extends BaseService {
 
 		// 数据处理
 		try {
-			Integer total = 0; //userManageProxy.distributeUser(userStatus,operatorId);
-			// 修改密码
+			Integer total = 0; //userManageProxy.distributeUser(operatorId);
 			if (total.intValue() > 0) {
 				return successResult("用户分配成功");
 			} else {
@@ -132,7 +130,7 @@ public class userManageService extends BaseService {
 		Integer operatorId;
 
 		try {
-
+			operatorId = Integer.parseInt(params.getString("operatorId"));
 		}catch (Exception e){
 			e.printStackTrace();
 			return errorParamsResult();
@@ -140,15 +138,12 @@ public class userManageService extends BaseService {
 
 		// 数据处理
 		try {
-			Integer total = 0; //userManageProxy.deleteUser(userStatus,operatorId);
-			// 修改密码
+			Integer total = userManageProxy.deleteUser(operatorId);
 			if (total.intValue() > 0) {
 				return successResult("用户删除成功");
 			} else {
 				return errorResult("操作失败，请稍后重试");
 			}
-
-
 		}catch (Exception e){
 			e.printStackTrace();
 			return errorExceptionResult();
@@ -159,14 +154,19 @@ public class userManageService extends BaseService {
 	 * @Author TR
 	 * @Create 2020/5/28 16:38
 	 * @Title: addUser
-	 * @Params: [params]
-	 * @Description:  添加用户
+	 * @Description: 添加用户
 	 */
 	public BaseResult addUser(JSONObject params) {
-
+		String operatorPwd;
+		String operatorName;
+		String operatorTel;
+		String operatorEmail;
 		// 参数
 		try {
-
+			operatorName = params.getString("operatorName");
+			operatorPwd = params.getString("operatorPwd");
+			operatorTel = params.getString("operatorTel");
+			operatorEmail = params.getString("operatorEmail");
 		}catch (Exception e){
 			e.printStackTrace();
 			return errorParamsResult();
@@ -174,8 +174,12 @@ public class userManageService extends BaseService {
 
 		// 数据处理
 		try {
-			Integer total = 0; //userManageProxy.deleteUser(userStatus,operatorId);
-			// 修改密码
+			// 查询用户名是否已经存在
+			Integer flag = userManageProxy.judgeUserExist(operatorName);
+			if(flag != null){
+				return errorResult("用户名已存在");
+			}
+			Integer total = userManageProxy.addUser(operatorName,operatorPwd,operatorTel,operatorEmail);
 			if (total.intValue() > 0) {
 				return successResult("用户添加成功");
 			} else {
@@ -191,14 +195,17 @@ public class userManageService extends BaseService {
 	 * @Author TR
 	 * @Create 2020/5/28 16:39
 	 * @Title: modifyUser
-	 * @Params: [params]
 	 * @Description: 编辑用户
 	 */
 	public BaseResult modifyUser(JSONObject params) {
-		
+		String operatorTel;
+		String operatorEmail;
+		Integer operatorId;
 		// 参数
 		try {
-
+			operatorTel = params.getString("operatorTel");
+			operatorEmail = params.getString("operatorEmail");
+			operatorId = Integer.parseInt(params.getString("operatorId"));
 		}catch (Exception e){
 			e.printStackTrace();
 			return errorParamsResult();
@@ -206,10 +213,9 @@ public class userManageService extends BaseService {
 
 		// 数据处理
 		try {
-			Integer total = 0; //userManageProxy.deleteUser(userStatus,operatorId);
-			// 修改密码
+			Integer total = userManageProxy.modifyUser(operatorTel,operatorEmail,operatorId);
 			if (total.intValue() > 0) {
-				return successResult("用户添加成功");
+				return successResult("用户信息修改成功");
 			} else {
 				return errorResult("操作失败，请稍后重试");
 			}

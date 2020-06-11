@@ -1,6 +1,7 @@
 package com.AppUI;
 
 
+import com.CrawImage.CrawImage;
 import com.DealDriver.imageCorrelationDriver;
 import com.ImageProcess.ImageCompress;
 import com.ImageProcess.SourceImageProcess;
@@ -8,6 +9,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
@@ -17,9 +19,7 @@ import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-
 import javax.imageio.ImageIO;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.net.URL;
@@ -43,7 +43,11 @@ public class Controller implements Initializable {
     private TextField InputFilePath; // 下载保存文件路径
     @FXML
     private Text SearchHint; // 搜索提示 默认 Life has no limitations.It always opens up for more possibilities for the better.
-
+    @FXML
+    private TextArea LogText;// 日志输出
+    @FXML
+    private TextField FocusMouse;// 鼠标聚焦
+    
     @FXML
     private AnchorPane ImageProcess; // 图片处理相关界面
     @FXML
@@ -72,11 +76,7 @@ public class Controller implements Initializable {
     @FXML
     private AnchorPane Parent; // 父界面
     @FXML
-    private Pane MouseSwitch;// 搜索界面 右下角 鼠标图片 跳转
-    @FXML
     private Pane ImageLeftDown;
-    @FXML
-    private Pane ImageRightUp;
 
 
     imageCorrelationDriver ImgDriver;
@@ -85,8 +85,8 @@ public class Controller implements Initializable {
     String targetImagePath = null; // 目标原图处理后的图片路径
     BufferedImage targetImage = null; // 目标图片用于合成
     BufferedImage resultImage = null; // 合成的结果图片
-
-
+    String log = "";// 输出
+    String baseUrl = "";  // 百度图片基础地址
     /**
      * @Author TR
      * @Create 2019年12月27日
@@ -95,14 +95,23 @@ public class Controller implements Initializable {
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        SearchHint.focusedProperty();// 聚焦
+    	FocusMouse.focusedProperty();// 聚焦
         ImgDriver = new imageCorrelationDriver();
+        baseUrl =  "http://image.baidu.com/search/index?tn=baiduimage&ipn=r&ct=201326592&cl=2&lm=-1&st=-1&fm=result&fr=&sf=1&fmq=1575339681068_R&pv=&ic=&nc=1&z=&hd=&latest=&copyright=&se=1&showtab=0&fb=0&width=&height=&face=0&istype=2&ie=utf-8&sid=&word=";
         controlTargetImageSize(1,TargetWidthControl);// 目标图片宽度控制
         controlTargetImageSize(2,TargetHeightControl);// 目标图片高度控制
         controlTargetImageSize(3,MergeWidthControl);// 碎片宽度控制
         controlTargetImageSize(4,MergeHeightControl);// 碎片高度控制
     }
-
+    /**
+     * @Author TR
+     * @Create 2019年12月27日
+     * @Title: clearLogText
+     * @Description: 清除log
+     */
+    public void clearLogText() {
+    	LogText.clear();
+    }
     /**
      * @Author TR
      * @Create 2019年12月27日
@@ -115,9 +124,9 @@ public class Controller implements Initializable {
         String choosePath = "";// 选择本地文件夹路径
         if(file != null){
             choosePath = file.getPath();
+            LogText.appendText("保存路径>> "+choosePath + "\n");
         }
         return choosePath+"\\";
-
     }
     /**
      * @Author TR
@@ -139,8 +148,7 @@ public class Controller implements Initializable {
      * @Description: 爬取图片并下载
      */
     public void searchAndDownload(MouseEvent event) {
-        SearchHint.setText("Catch a falling start and put it in your pocket,never let it fade away.");// 搜索中提示
-
+        SearchHint.setText("Catch a falling start and put it in your pocket,never let it fade away.");// 搜索提示
         String savePath = "F:/thousandMapImaging/resourcesPictures/resources/";// 保存路径
         if(!InputFilePath.getText().equals("")){
             savePath = InputFilePath.getText();
@@ -151,19 +159,28 @@ public class Controller implements Initializable {
             keyWord = InputSearch.getText();
         }
         System.out.println("关键字>> "+keyWord);
+        LogText.appendText("关键字>> "+keyWord+"\n");
         int imageNumber = 5;// 搜索数量 int imageNumber = 5;
         if(!InputNumber.getText().equals("")){
             imageNumber = Integer.valueOf(InputNumber.getText());
         }
         System.out.println("数量>> "+imageNumber);
+        LogText.appendText("数量>> "+imageNumber+"\n");
         // 爬虫
-        ImgDriver.downloadImages(keyWord,imageNumber,savePath,currentIndex);
+        //ImgDriver.downloadImages(keyWord,imageNumber,savePath,currentIndex,log);
+        try {
+            CrawImage craw = new CrawImage(imageNumber, currentIndex, savePath,log);
+            String targetUrl = baseUrl +keyWord;
+            LogText.appendText("图片下载中.........\n");
+            log = craw.crawImageImplement(targetUrl);
+            LogText.appendText(log+"\n");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        LogText.appendText("图片下载完成!\n\n");
         // 完成下载后提示
         SearchHint.setText("You got out on that stage now,and you show them how beautiful you are.");// 搜索完成提示
-        // 是否进入文件夹 操作 弹框
-
     }
-
 
     /**
      * @Author TR
@@ -177,6 +194,8 @@ public class Controller implements Initializable {
         if(!InputFilePath.getText().equals("")){
             ResourcePath.setText(InputFilePath.getText());// 合成图片需要资源数据路径显示
         }
+        SearchHint.setText("Catch a falling start and put it in your pocket,never let it fade away.");// 搜索提示
+        LogText.clear();
     }
 
 
@@ -186,7 +205,8 @@ public class Controller implements Initializable {
      * @Title: controlTargetImageSize
      * @Description: 图片size控制条
      */
-    public void controlTargetImageSize(int type, Slider slider){
+    @SuppressWarnings("restriction")
+	public void controlTargetImageSize(int type, Slider slider){
         switch(type){
             case 1:{
                 slider.setMin(288);
@@ -266,7 +286,6 @@ public class Controller implements Initializable {
         targetImagePath = sourceImagePath;
         // 处理的图片 BufferedImage 原始图片
         targetImage = ImageIO.read(new File(sourceImagePath));
-
     }
 
     /**
@@ -288,6 +307,7 @@ public class Controller implements Initializable {
     public void setTargetImageHeight(MouseEvent event) {
         TargetImageHeight.setText((int)Math.floor(TargetHeightControl.getValue())+"");
     }
+    
     /**
      * @Author TR
      * @Create 2019年12月31日
@@ -329,7 +349,6 @@ public class Controller implements Initializable {
         }
     }
 
-
     /**
      * @Author TR
      * @Create 2019年12月31日
@@ -349,7 +368,6 @@ public class Controller implements Initializable {
     public void setMergeImageHeight(MouseEvent event) {
         MergeImageHeight.setText((int)Math.floor(MergeHeightControl.getValue())+"");
     }
-
 
     /**
      * @Author TR
@@ -402,9 +420,6 @@ public class Controller implements Initializable {
      */
     public void menuChoose(MouseEvent event) {
     }
-
-
-
 
 }
 

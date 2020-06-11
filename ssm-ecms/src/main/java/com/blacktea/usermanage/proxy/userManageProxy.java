@@ -2,6 +2,7 @@ package com.blacktea.usermanage.proxy;
 
 import com.blacktea.common.page.PageForSystem;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.security.access.method.P;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -35,4 +36,41 @@ public interface userManageProxy {
 	 */
 	Integer updateUserStatus(@Param("userStatus") Integer userStatus,
 							 @Param("operatorId") Integer operatorId);
+
+	/**
+	 * @Author TR
+	 * @Create 2020/6/9 8:46
+	 * @Title: addUser
+	 * @Description: 添加用户
+	 */
+	Integer addUser(@Param("userName") String userName,
+					@Param("userPwd") String userPwd,
+					@Param("userTel") String userTel,
+					@Param("userEmail") String userEmail);
+
+	/**
+	 * @Author TR
+	 * @Create 2020/6/9 8:59
+	 * @Title: deleteUser
+	 * @Description:
+	 */
+	Integer deleteUser(@Param("userId") Integer userId);
+
+	/**
+	 * @Author TR
+	 * @Create 2020/6/9 9:05
+	 * @Title: modifyUser
+	 * @Description: 编辑用户信息
+	 */
+	Integer modifyUser(@Param("userTel") String userTel,
+					   @Param("userEmail") String userEmail,
+					   @Param("userId") Integer userId);
+
+	/**
+	 * @Author TR
+	 * @Create 2020/6/9 10:08
+	 * @Title: judgeExist
+	 * @Description: 判断用户是否已经存在
+	 */
+	Integer judgeUserExist(@Param("operatorName") String operatorName);
 }

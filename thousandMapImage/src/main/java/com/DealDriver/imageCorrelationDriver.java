@@ -18,12 +18,9 @@ public class imageCorrelationDriver {
     static String baseUrl = "http://image.baidu.com/search/index?tn=baiduimage&ipn=r&ct=201326592&cl=2&lm=-1&st=-1&fm=result&fr=&sf=1&fmq=1575339681068_R&pv=&ic=&nc=1&z=&hd=&latest=&copyright=&se=1&showtab=0&fb=0&width=&height=&face=0&istype=2&ie=utf-8&sid=&word=";
 
     // 下载图片
-    public static void downloadImages(String keyWord, int imageNumber, String savePath,int currentIndex){
+    public static void downloadImages(String keyWord, int imageNumber, String savePath,int currentIndex,String log){
         try {
-            // 搜索关键词 String keyWord = "动漫人物";
-            // 图片张数 int imageNumber = 5;
-            // "F:\\thousandMapImaging\\resourcesPictures\\resources\\"保存路径
-            CrawImage craw = new CrawImage(imageNumber, currentIndex, savePath);
+            CrawImage craw = new CrawImage(imageNumber, currentIndex, savePath,log);
             String targetUrl = baseUrl +keyWord;
             craw.crawImageImplement(targetUrl);
         } catch (Exception e) {
@@ -32,16 +29,8 @@ public class imageCorrelationDriver {
         System.out.println( "图片下载完成!" );
     }
 
-    // 拼图成像com.thousandMapImage.jigsawPuzzle
+    // 测试  拼图成像com.thousandMapImage.jigsawPuzzle
     private static void mergeAndSave(){
-// 		 	 Scanner input = new Scanner(System.in);
-//   	     System.out.println("请输入图片全路径："); // F:\\thousandMapImaging\\resourceMultithread\\resources
-//   	     String imageClubPath = input.nextLine();
-//   	     System.out.println("请输入目标图片全路径："); // F:\\thousandMapImaging\\targetImage\\yexiu.jpg
-//   	     String targetImage = input.nextLine();
-//		     System.out.println("请输入结果图片保存路径："); // F:\\thousandMapImaging\\targetImage\\yexiu_re.jpg
-//		     String outPath = input.nextLine();
-//   	     input.close();
         // 目标图片
         File targetImage = new File("F:\\thousandMapImaging\\targetImage\\yexiu.jpg");
         // 结果图片全路径
@@ -59,5 +48,4 @@ public class imageCorrelationDriver {
         }
         System.out.println( "合成图像完成!" );
     }
-
 }

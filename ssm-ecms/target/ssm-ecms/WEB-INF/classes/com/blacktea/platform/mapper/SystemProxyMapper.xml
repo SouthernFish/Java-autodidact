@@ -48,11 +48,7 @@
         SET
             mg_pwd = #{operatorPwd}
         WHERE
-          mg_id = #{operatorId}
-          AND mg_state = 1
+            mg_id = #{operatorId}
+            AND mg_state = 1
     </update>
-
-
-
-
 </mapper>

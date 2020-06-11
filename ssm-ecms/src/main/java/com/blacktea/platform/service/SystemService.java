@@ -97,7 +97,7 @@ public class SystemService extends BaseService {
 	 * @Params: [token]
 	 * @Description: 退出登录
 	 */
-	public BaseResult logout(String token) {
+	public BaseResult loginOut(String token) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		SystemOperatorEntity operator = null;
 		try {

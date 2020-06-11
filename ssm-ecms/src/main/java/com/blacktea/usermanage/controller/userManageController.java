@@ -80,7 +80,6 @@ public class userManageController extends BaseController {
 	 * @Author TR
 	 * @Create 2020/5/28 13:34
 	 * @Title: addUser
-	 * @Params: []
 	 * @Description: 添加用户
 	 */
 	@CheckToken
@@ -88,4 +87,18 @@ public class userManageController extends BaseController {
 	public BaseResult addUser(@CheckParam() String token, String params){
 		return userManageService.addUser( getJSONObjectParams(params));
 	}
+
+	/**
+	 * @Author TR
+	 * @Create 2020/6/9 9:09
+	 * @Title: modifyUser
+	 * @Description: 编辑用户
+	 */
+	@CheckToken
+	@RequestMapping(value = "/modifyuser",method = RequestMethod.POST)
+	public BaseResult modifyUser(@CheckParam() String token, String params){
+		return userManageService.modifyUser( getJSONObjectParams(params));
+	}
+
+
 }
